@@ -1,6 +1,8 @@
+import StyledMain from './StyledMain';
+
 const Main = () => {
   return (
-    <section>
+    <section css={StyledMain}>
       <div>Main</div>
     </section>
   );
