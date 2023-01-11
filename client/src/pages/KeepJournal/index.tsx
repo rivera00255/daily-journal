@@ -1,3 +1,4 @@
+import Map from '../../components/Map';
 import WeatherForecast from '../../components/WeatherForecast';
 import StyledKeepJournal from './StyledKeepJournal';
 
@@ -8,7 +9,7 @@ const KeepJournal = () => {
         <h3>Keep a Journal</h3>
         <div>
           <WeatherForecast />
-          <div>위치 검색</div>
+          {/* <Map /> */}
         </div>
         <div>
           <input type="text" placeholder="오늘의 기록..." />
