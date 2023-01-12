@@ -7,6 +7,7 @@ const { kakao }: any = window;
 const Map = () => {
   const geolocation = useGeolocation();
 
+  // 지도 생성
   const getMap = (lat: number, lng: number) => {
     const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
 
@@ -19,10 +20,10 @@ const Map = () => {
     const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
     // 마커가 표시될 위치입니다
-    var markerPosition = new kakao.maps.LatLng(lat, lng);
+    const markerPosition = new kakao.maps.LatLng(lat, lng);
 
     // 마커를 생성합니다
-    var marker = new kakao.maps.Marker({
+    const marker = new kakao.maps.Marker({
       position: markerPosition,
     });
 
@@ -32,17 +33,13 @@ const Map = () => {
     return map;
   };
 
-  //   useEffect(() => {
-  //     const script = document.createElement('script');
-  //     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_APP_MAP_KEY}`;
-  //     script.type = 'text/javascript';
-  //     script.async = true;
-  //     document.body.appendChild(script);
-
-  //     return () => {
-  //       document.body.removeChild(script);
-  //     };
-  //   }, []);
+  // useEffect(() => {
+  //   const script = document.createElement('script');
+  //   script.type = 'text/javascript';
+  //   script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_APP_MAP_KEY}`;
+  //   script.async = true;
+  //   document.body.appendChild(script);
+  // }, []);
 
   useEffect(() => {
     const lat = geolocation.loaded ? geolocation.coords.lat : 33.450701;

@@ -16,6 +16,7 @@ type WeatherResponse = {
 
 const WeatherForecast = () => {
   const baseUrl = import.meta.env.VITE_APP_API_URL;
+  const addressUrl = import.meta.env.VITE_APP_ADDR_URL;
 
   const weatherCodeList = [
     { code: 'T1H', name: '기온', symbol: '℃' },
@@ -41,6 +42,20 @@ const WeatherForecast = () => {
       parseInt(min) > 40 ? now.toTimeString().substring(0, 2) : parseInt(now.toTimeString().substring(0, 2)) - 1;
     setCurrent((prev) => ({ ...prev, baseDate: date, baseTime: time.toString().padStart(2, '0') }));
   };
+
+  const { data: address } = useQuery(
+    ['address', geolocation.coords.lat, geolocation.coords.lng],
+    () => {
+      return axios.get(`${addressUrl}?x=${geolocation.coords.lng}&y=${geolocation.coords.lat}`, {
+        headers: { Authorization: `KakaoAK ${import.meta.env.VITE_APP_API_KEY}` },
+      });
+    },
+    { enabled: enable }
+  );
+  // console.log(address);
+
+  const currentAddress = useMemo(() => address?.data?.documents[0]?.address, [address]);
+  // console.log(currentAddress);
 
   const { data: weather } = useQuery(
     ['weather', current],
@@ -94,6 +109,7 @@ const WeatherForecast = () => {
   return (
     <div css={StyledWeatherForecast}>
       <div>
+        <h4>{currentAddress?.address_name}</h4>
         {Array.from(weatherReport.values()).map((item) => (
           <div key={item.name}>{`${item.name} ${item.value}${item.symbol}`}</div>
         ))}

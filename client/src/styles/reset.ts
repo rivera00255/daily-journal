@@ -8,6 +8,7 @@ const reset = css`
     border-width: 0;
     border-style: solid;
     border-color: theme('borderColor.DEFAULT', 'currentColor');
+    font-family: 'Noto Sans KR', sans-serif;
   }
   ::before,
   ::after {

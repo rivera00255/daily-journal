@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
 
 const StyledMap = css`
-  width: 200px;
-  height: 200px;
+  width: 210px;
+  height: 210px;
+  margin: 0 10px;
 `;
 
 export default StyledMap;
