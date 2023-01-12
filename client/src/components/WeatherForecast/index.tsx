@@ -14,9 +14,16 @@ type WeatherResponse = {
   obsrValue: string;
 };
 
-const WeatherForecast = () => {
+export const addressUrl = import.meta.env.VITE_APP_ADDR_URL;
+
+const WeatherForecast = ({
+  search,
+  searchedPosition,
+}: {
+  search: string;
+  searchedPosition: { lat: number; lng: number };
+}) => {
   const baseUrl = import.meta.env.VITE_APP_API_URL;
-  const addressUrl = import.meta.env.VITE_APP_ADDR_URL;
 
   const weatherCodeList = [
     { code: 'T1H', name: '기온', symbol: '℃' },
@@ -46,7 +53,7 @@ const WeatherForecast = () => {
   const { data: address } = useQuery(
     ['address', geolocation.coords.lat, geolocation.coords.lng],
     () => {
-      return axios.get(`${addressUrl}?x=${geolocation.coords.lng}&y=${geolocation.coords.lat}`, {
+      return axios.get(`${addressUrl}/geo/coord2address.json?x=${geolocation.coords.lng}&y=${geolocation.coords.lat}`, {
         headers: { Authorization: `KakaoAK ${import.meta.env.VITE_APP_API_KEY}` },
       });
     },
@@ -95,9 +102,6 @@ const WeatherForecast = () => {
       setCurrent((prev) => ({ ...prev, nx: coords.x, ny: coords.y }));
       if (current.nx !== 0 && current.ny !== 0) {
         setEnable(false);
-        // console.log(
-        //   `${baseUrl}&base_date=${current.baseDate}&base_time=${current.baseTime}00&nx=${current.nx}&ny=${current.ny}`
-        // );
       }
     }
   }, [geolocation]);

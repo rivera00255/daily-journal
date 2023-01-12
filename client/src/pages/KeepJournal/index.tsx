@@ -1,9 +1,15 @@
 import Map from '../../components/Map';
-import WeatherForecast from '../../components/WeatherForecast';
+import WeatherForecast, { addressUrl } from '../../components/WeatherForecast';
 import StyledKeepJournal from './StyledKeepJournal';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const KeepJournal = () => {
+  const [search, setSearch] = useState('');
+  const [searchedPosition, setSearchedPosition] = useState({ lat: 0, lng: 0 });
+
   const open = useDaumPostcodePopup('//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
 
   const getLocation = (data: any) => {
@@ -20,21 +26,40 @@ const KeepJournal = () => {
     //   fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
     // }
 
-    console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+    // console.log(fullAddress);
+    setSearch(fullAddress);
   };
 
   const searchLocation = () => {
     open({ onComplete: getLocation });
   };
 
+  const { data: position } = useQuery(
+    ['search', search],
+    () => {
+      return axios.get(`${addressUrl}/search/address.json?query=${search}`, {
+        headers: { Authorization: `KakaoAK ${import.meta.env.VITE_APP_API_KEY}` },
+      });
+    },
+    { enabled: search !== '' ? true : false }
+  );
+
+  const searchedAddress = useMemo(() => position?.data?.documents[0]?.address, [position]);
+
+  useEffect(() => {
+    if (searchedAddress) {
+      setSearchedPosition({ lat: searchedAddress.y, lng: searchedAddress.x });
+    }
+  }, [searchedAddress]);
+
   return (
     <section css={StyledKeepJournal}>
       <div className="container">
         <h3>Keep a Journal</h3>
         <div>
-          <WeatherForecast />
+          <WeatherForecast search={search} searchedPosition={searchedPosition} />
           {/* <div style={{ position: 'relative' }}>
-            <Map />
+            <Map searchedPosition={searchedPosition} />
             <button onClick={searchLocation} style={{ position: 'absolute', top: '0', right: '10px', zIndex: '1' }}>
               위치 검색
             </button>

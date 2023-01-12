@@ -4,8 +4,11 @@ import StyledMap from './StyledMap';
 
 const { kakao }: any = window;
 
-const Map = () => {
+const Map = ({ searchedPosition }: { searchedPosition: { lat: number; lng: number } }) => {
   const geolocation = useGeolocation();
+
+  const lat = geolocation.loaded ? geolocation.coords.lat : 33.450701;
+  const lng = geolocation.loaded ? geolocation.coords.lng : 126.570667;
 
   // 지도 생성
   const getMap = (lat: number, lng: number) => {
@@ -42,10 +45,12 @@ const Map = () => {
   // }, []);
 
   useEffect(() => {
-    const lat = geolocation.loaded ? geolocation.coords.lat : 33.450701;
-    const lng = geolocation.loaded ? geolocation.coords.lng : 126.570667;
-    getMap(lat, lng);
-  }, [geolocation]);
+    if (searchedPosition.lat === 0 && searchedPosition.lng === 0) {
+      getMap(lat, lng);
+    } else {
+      getMap(searchedPosition.lat, searchedPosition.lng);
+    }
+  }, [geolocation, searchedPosition]);
 
   return <div id="map" css={StyledMap}></div>;
 };
