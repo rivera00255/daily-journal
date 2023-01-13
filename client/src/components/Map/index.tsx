@@ -5,10 +5,10 @@ import StyledMap from './StyledMap';
 const { kakao }: any = window;
 
 const Map = ({ searchedPosition }: { searchedPosition: { lat: number; lng: number } }) => {
-  const geolocation = useGeolocation();
+  const geolocation = useGeolocation(0, 0);
 
-  const lat = geolocation.loaded ? geolocation.coords.lat : 33.450701;
-  const lng = geolocation.loaded ? geolocation.coords.lng : 126.570667;
+  const lat = geolocation.loaded ? geolocation.coords.lat : 37.563569;
+  const lng = geolocation.loaded ? geolocation.coords.lng : 126.980008;
 
   // 지도 생성
   const getMap = (lat: number, lng: number) => {

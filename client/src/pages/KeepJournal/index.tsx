@@ -2,7 +2,7 @@ import Map from '../../components/Map';
 import WeatherForecast, { addressUrl } from '../../components/WeatherForecast';
 import StyledKeepJournal from './StyledKeepJournal';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -58,12 +58,10 @@ const KeepJournal = () => {
         <h3>Keep a Journal</h3>
         <div>
           <WeatherForecast search={search} searchedPosition={searchedPosition} />
-          {/* <div style={{ position: 'relative' }}>
+          <div className="location">
             <Map searchedPosition={searchedPosition} />
-            <button onClick={searchLocation} style={{ position: 'absolute', top: '0', right: '10px', zIndex: '1' }}>
-              위치 검색
-            </button>
-          </div> */}
+            <button onClick={searchLocation}>위치 검색</button>
+          </div>
         </div>
         <div>
           <input type="text" placeholder="오늘의 기록..." />

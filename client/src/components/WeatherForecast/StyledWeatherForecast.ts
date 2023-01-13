@@ -3,6 +3,8 @@ import { css } from '@emotion/react';
 const StyledWeatherForecast = css`
   border: 2px solid #757575;
   border-radius: 5px;
+  min-width: 120px;
+  min-height: 120px;
   padding: 40px;
   margin: 0 10px;
   h4 {

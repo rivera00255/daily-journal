@@ -32,12 +32,12 @@ const WeatherForecast = ({
     { code: 'WSD', name: '풍속', symbol: 'm/s' },
   ];
 
-  const geolocation = useGeolocation(); // 현재 위치
+  const geolocation = useGeolocation(searchedPosition.lat, searchedPosition.lng); // 현재 위치
   // const coords = useCoordinate('toXY', geolocation.coords.lat, geolocation.coords.lng);
   const now = new Date();
-  // console.log(geolocation.coords);
+  // console.log(geolocation.loaded);
 
-  const [current, setCurrent] = useState({ baseDate: '', baseTime: '', nx: 0, ny: 0 });
+  const [current, setCurrent] = useState({ baseDate: '', baseTime: '', nx: 0, ny: 0, changed: false });
   const [enable, setEnable] = useState(true);
   const [weatherReport, setWeatherReport] = useState(new Map());
 
@@ -67,10 +67,9 @@ const WeatherForecast = ({
   const { data: weather } = useQuery(
     ['weather', current],
     async () => {
-      const res = await axios.get(
+      return await axios.get(
         `${baseUrl}&base_date=${current.baseDate}&base_time=${current.baseTime}00&nx=${current.nx}&ny=${current.ny}`
       );
-      return res;
     },
     { enabled: enable }
   );
@@ -99,11 +98,12 @@ const WeatherForecast = ({
   useEffect(() => {
     if (geolocation.loaded) {
       const coords = useCoordinate('toXY', geolocation.coords.lat, geolocation.coords.lng); // 현재 위치를 x,y 좌표로 변환
-      setCurrent((prev) => ({ ...prev, nx: coords.x, ny: coords.y }));
-      if (current.nx !== 0 && current.ny !== 0) {
+      setCurrent((prev) => ({ ...prev, nx: coords.x, ny: coords.y, changed: true }));
+      if (current.changed === true) {
         setEnable(false);
       }
     }
+    setCurrent((prev) => ({ ...prev, changed: false }));
   }, [geolocation]);
 
   useEffect(() => {
@@ -113,10 +113,16 @@ const WeatherForecast = ({
   return (
     <div css={StyledWeatherForecast}>
       <div>
-        <h4>{currentAddress?.address_name}</h4>
-        {Array.from(weatherReport.values()).map((item) => (
-          <div key={item.name}>{`${item.name} ${item.value}${item.symbol}`}</div>
-        ))}
+        {geolocation.loaded === true ? (
+          <>
+            <h4>{search === '' ? currentAddress?.address_name : search}</h4>
+            {Array.from(weatherReport.values()).map((item) => (
+              <div key={item.name}>{`${item.name} ${item.value}${item.symbol}`}</div>
+            ))}
+          </>
+        ) : (
+          <h4>위치 정보를 찾을 수 없습니다.</h4>
+        )}
       </div>
     </div>
   );

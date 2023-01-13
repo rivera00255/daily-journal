@@ -11,6 +11,19 @@ const StyledKeepJournal = css`
       justify-content: center;
       margin: 20px 0;
     }
+    .location {
+      position: relative;
+      > button {
+        position: absolute;
+        top: 4px;
+        right: 14px;
+        z-index: 1;
+        font-size: 13px;
+        background: #757575;
+        color: #eee;
+        padding: 4px 8px;
+      }
+    }
   }
   h3 {
     font-size: 18px;
