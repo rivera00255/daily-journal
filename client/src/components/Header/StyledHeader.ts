@@ -9,7 +9,8 @@ const StyledHeader = css`
     > h1 {
       text-align: center;
       margin: 10px 0 20px 0;
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: 800;
     }
     > ul {
       display: flex;

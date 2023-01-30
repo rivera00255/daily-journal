@@ -56,6 +56,7 @@ const KeepJournal = () => {
     <section css={StyledKeepJournal}>
       <div className="container">
         <h3>Keep a Journal</h3>
+        <hr />
         <div>
           <WeatherForecast search={search} searchedPosition={searchedPosition} />
           <div className="location">
@@ -67,6 +68,7 @@ const KeepJournal = () => {
           <input type="text" placeholder="오늘의 기록..." />
           <button>기록하기</button>
         </div>
+        <hr />
       </div>
     </section>
   );
