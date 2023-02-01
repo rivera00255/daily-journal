@@ -2,13 +2,35 @@ import Map from '../../components/Map';
 import WeatherForecast, { addressUrl } from '../../components/WeatherForecast';
 import StyledKeepJournal from './StyledKeepJournal';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
-import { useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
+import weatherState from '../../recoils/weather';
+import { Journal } from '../../model/Journals';
+import { baseUrl } from '..';
 
 const KeepJournal = () => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [search, setSearch] = useState('');
   const [searchedPosition, setSearchedPosition] = useState({ lat: 0, lng: 0 });
+
+  const weather = useRecoilValue(weatherState);
+  // console.log(weather);
+
+  const { mutate: createJournal } = useMutation(
+    (journal: Pick<Journal, 'content' | 'weather' | 'location'>) => {
+      return axios.post(`${baseUrl}/journals`, journal);
+    },
+    {
+      onSuccess: (data) => {
+        alert('기록 완료');
+        console.log(data);
+      },
+      onError: (err) => console.log(err),
+    }
+  );
 
   const open = useDaumPostcodePopup('//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
 
@@ -65,8 +87,23 @@ const KeepJournal = () => {
           </div>
         </div>
         <div>
-          <input type="text" placeholder="오늘의 기록..." />
-          <button>기록하기</button>
+          <input type="text" placeholder="오늘의 기록..." ref={inputRef} />
+          <button
+            onClick={() => {
+              if (inputRef.current) {
+                createJournal({
+                  content: inputRef.current.value,
+                  weather: {
+                    temperature: weather.temperature,
+                    precipitation: weather.precipitation,
+                  },
+                  location: weather.location,
+                });
+                inputRef.current.value = '';
+              }
+            }}>
+            기록하기
+          </button>
         </div>
         <hr />
       </div>

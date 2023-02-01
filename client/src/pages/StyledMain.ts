@@ -21,6 +21,12 @@ const StyledMain = css`
       border-radius: 4px;
       margin: 8px 0 40px 0;
     }
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
   }
 `;
 

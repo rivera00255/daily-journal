@@ -5,7 +5,7 @@ type Journal = {
   createdAt: string;
   updatedAt?: string;
   weather: {
-    status: "Sunny" | "Cloudy" | "Rain" | "Snow";
+    // status: "Sunny" | "Cloudy" | "Rain" | "Snow";
     temperature: number;
     precipitation: number;
   };

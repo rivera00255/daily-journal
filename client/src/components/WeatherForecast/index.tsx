@@ -1,18 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { useCoordinate } from '../../hooks/useCoordinate';
 import useGeolocation from '../../hooks/useGeolocation';
+import { WeatherResponse } from '../../model/Journals';
+import weatherState from '../../recoils/weather';
 import StyledWeatherForecast from './StyledWeatherForecast';
-
-type WeatherResponse = {
-  baseDate: string;
-  baseTime: string;
-  category: string;
-  nx: number;
-  ny: number;
-  obsrValue: string;
-};
 
 export const addressUrl = import.meta.env.VITE_APP_ADDR_URL;
 
@@ -40,10 +34,13 @@ const WeatherForecast = ({
   const [current, setCurrent] = useState({ baseDate: '', baseTime: '', nx: 0, ny: 0, changed: false });
   const [enable, setEnable] = useState(true);
   const [weatherReport, setWeatherReport] = useState(new Map());
+  const setWeatherState = useSetRecoilState(weatherState);
 
   const getDateTime = () => {
-    const today = now.toLocaleDateString().replaceAll('.', '').replaceAll(' ', '');
-    const date = today.length < 8 ? ''.concat(today.substring(0, 4), '0', today.substring(4)) : today;
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const date = `${year}${month}${day}`;
     const min = now.toTimeString().substring(3, 5);
     const time =
       parseInt(min) > 40 ? now.toTimeString().substring(0, 2) : parseInt(now.toTimeString().substring(0, 2)) - 1;
@@ -73,10 +70,10 @@ const WeatherForecast = ({
     },
     { enabled: enable }
   );
-  //   console.log(weather?.data);
+  // console.log(weather?.data);
 
   const currentWeather = useMemo(() => weather?.data?.response?.body?.items, [weather]);
-  //   console.log(currentWeather);
+  // console.log(currentWeather);
 
   const handleWeatherReport = () => {
     currentWeather?.item?.map((item: WeatherResponse) => {
@@ -109,6 +106,17 @@ const WeatherForecast = ({
   useEffect(() => {
     handleWeatherReport();
   }, [currentWeather]);
+
+  useEffect(() => {
+    setWeatherState((prev) => ({ ...prev, location: search === '' ? currentAddress?.address_name : search }));
+  }, [currentAddress]);
+
+  useEffect(() => {
+    Array.from(weatherReport.values()).map((item) => {
+      item.name === '기온' && setWeatherState((prev) => ({ ...prev, temperature: Number(item.value) }));
+      item.name === '강수량' && setWeatherState((prev) => ({ ...prev, precipitation: Number(item.value) }));
+    });
+  }, [weatherReport]);
 
   return (
     <div css={StyledWeatherForecast}>

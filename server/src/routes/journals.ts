@@ -3,7 +3,7 @@ import { readDB, writeDB } from "../dbController";
 import Journal from "../model/Journal";
 
 const handleId = (journals: Journal[]) => {
-  return journals.length + 1;
+  return journals[journals.length - 1].id + 1;
 };
 
 const setJournals = (data: any) => writeDB(data);
@@ -17,7 +17,7 @@ export const createJournal = (req: Request, res: Response) => {
       content: req.body.content,
       createdAt: timestamp,
       weather: {
-        status: req.body.weather.status,
+        // status: req.body.weather.status,
         temperature: req.body.weather.temperature,
         precipitation: req.body.weather.precipitation,
       },
