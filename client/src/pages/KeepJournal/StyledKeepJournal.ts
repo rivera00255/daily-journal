@@ -62,6 +62,15 @@ const StyledKeepJournal = css`
     margin-right: 10px;
     font-size: 15px;
   }
+  textarea {
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+    padding: 4px;
+    width: 480px;
+    margin-right: 10px;
+    font-size: 15px;
+    resize: none;
+  }
   button {
     background: #eee;
     padding: 4px 16px;

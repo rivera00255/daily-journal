@@ -24,8 +24,17 @@ const StyledMain = css`
     > div {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: space-evenly;
       flex-wrap: wrap;
+      > a {
+        /* border: 2px solid #757575;
+        border-radius: 5px;
+        max-width: 45%;
+        min-height: 120px;
+        padding: 20px 40px;
+        margin: 16px 8px;
+        position: relative; */
+      }
     }
   }
 `;

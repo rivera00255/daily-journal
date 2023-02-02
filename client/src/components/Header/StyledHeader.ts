@@ -20,7 +20,7 @@ const StyledHeader = css`
         margin: 0 10px;
       }
     }
-    > div {
+    > button {
       position: absolute;
       top: 0;
       right: 0;

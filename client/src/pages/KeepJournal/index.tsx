@@ -3,7 +3,7 @@ import WeatherForecast, { addressUrl } from '../../components/WeatherForecast';
 import StyledKeepJournal from './StyledKeepJournal';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import weatherState from '../../recoils/weather';
@@ -11,7 +11,7 @@ import { Journal } from '../../model/Journals';
 import { baseUrl } from '..';
 
 const KeepJournal = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const [search, setSearch] = useState('');
   const [searchedPosition, setSearchedPosition] = useState({ lat: 0, lng: 0 });
@@ -19,14 +19,16 @@ const KeepJournal = () => {
   const weather = useRecoilValue(weatherState);
   // console.log(weather);
 
+  const queryClient = useQueryClient();
+
   const { mutate: createJournal } = useMutation(
     (journal: Pick<Journal, 'content' | 'weather' | 'location'>) => {
       return axios.post(`${baseUrl}/journals`, journal);
     },
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         alert('기록 완료');
-        console.log(data);
+        queryClient.invalidateQueries(['journals']);
       },
       onError: (err) => console.log(err),
     }
@@ -87,10 +89,11 @@ const KeepJournal = () => {
           </div>
         </div>
         <div>
-          <input type="text" placeholder="오늘의 기록..." ref={inputRef} />
+          {/* <input type="text" placeholder="오늘의 기록..." ref={inputRef} /> */}
+          <textarea placeholder="오늘의 기록..." ref={inputRef} />
           <button
             onClick={() => {
-              if (inputRef.current) {
+              if (inputRef.current && inputRef.current.value !== '') {
                 createJournal({
                   content: inputRef.current.value,
                   weather: {

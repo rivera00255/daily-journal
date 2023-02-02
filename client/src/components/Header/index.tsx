@@ -16,7 +16,7 @@ const Header = () => {
             <Link to="/keep">기록하기</Link>
           </li>
         </ul>
-        <div>로그인/회원가입</div>
+        <button>로그인</button>
       </nav>
     </header>
   );

@@ -2,7 +2,7 @@ export type Journal = {
   id?: number;
   writer?: string;
   content: string;
-  createdAt?: string;
+  createdAt: string;
   updatedAt?: string;
   weather: {
     // status: 'Sunny' | 'Cloudy' | 'Rain' | 'Snow';
