@@ -17,6 +17,7 @@ const createJournal = (req: Request, res: Response) => {
       id: handleId(journals),
       content: req.body.content,
       createdAt: timestamp,
+      writer: req.body.writer,
       weather: {
         // status: req.body.weather.status,
         temperature: req.body.weather.temperature,

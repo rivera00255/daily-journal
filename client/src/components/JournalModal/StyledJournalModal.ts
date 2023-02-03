@@ -55,6 +55,11 @@ const StyledJournalModal = css`
         }
       }
     }
+    > p {
+      font-size: 14px;
+      margin-top: 4px;
+      color: #444;
+    }
     .active {
       border: 1px solid #bdbdbd;
       background: #fff;

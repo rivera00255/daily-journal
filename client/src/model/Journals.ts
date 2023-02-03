@@ -1,6 +1,6 @@
 export type Journal = {
   id?: number;
-  writer?: string;
+  writer: string;
   content: string;
   createdAt: string;
   updatedAt?: string;

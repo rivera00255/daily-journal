@@ -8,11 +8,14 @@ import { baseUrl } from '../../pages';
 import { User } from '../../model/Users';
 import { useSetRecoilState } from 'recoil';
 import authState from '../../recoils/auth';
+import { useNavigate } from 'react-router-dom';
 
 const LoginModal = ({ popup, setPopup }: { popup: boolean; setPopup: Dispatch<SetStateAction<boolean>> }) => {
   const [chooseLogin, setChooseLogin] = useState(true);
 
   const setAuthState = useSetRecoilState(authState);
+
+  const navigate = useNavigate();
 
   const { mutate: signup } = useMutation(
     (user: User) => {
@@ -39,6 +42,7 @@ const LoginModal = ({ popup, setPopup }: { popup: boolean; setPopup: Dispatch<Se
         // console.log(data);
         setAuthState((prev) => ({ ...prev, user: data?.data?.user.email, token: data?.data.token }));
         setPopup(false);
+        navigate('/');
       },
       onError: (err: AxiosError<{ error: string }>) => {
         console.log(err);

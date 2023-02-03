@@ -18,6 +18,11 @@ const StyledHeader = css`
       justify-content: center;
       > li {
         margin: 0 10px;
+        color: #757575;
+      }
+      .current {
+        color: #444;
+        font-weight: 500;
       }
     }
     > button {

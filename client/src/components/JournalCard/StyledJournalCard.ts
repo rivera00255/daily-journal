@@ -32,6 +32,7 @@ const StyledJournalCard = css`
     &:last-of-type {
       font-size: 13px;
       margin-bottom: 0;
+      font-weight: 200;
     }
   }
   > div {

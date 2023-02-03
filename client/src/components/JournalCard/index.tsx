@@ -17,9 +17,10 @@ const JournalCard = ({
         <p>{item.location}</p>
         <p>
           <strong>{item.weather.temperature}°</strong>
+          {item.weather.precipitation > 0 && <strong>{item.weather.precipitation}mm</strong>}
         </p>
       </div>
-      <p>writer</p>
+      <p>{item.writer}</p>
     </div>
   );
 };

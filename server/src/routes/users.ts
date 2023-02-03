@@ -58,7 +58,7 @@ export const login = async (req: Request, res: Response) => {
     // const token = jwt.sign(user.email, "2w3e4r");
     const token = jwt.sign(
       {
-        exp: 60 * 60,
+        // exp: 60 * 60,
         data: user.email,
       },
       `${process.env.JWT_KEY}`
