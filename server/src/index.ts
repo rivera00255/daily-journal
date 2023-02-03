@@ -1,15 +1,13 @@
 import express, { json, urlencoded } from "express";
 import cors from "cors";
-import {
-  createJournal,
-  deleteJournal,
-  getJournal,
-  getJournalList,
-  updateJournal,
-} from "./routes/journals";
+import * as dotenv from "dotenv";
+import journalRoutes from "./routes/journals";
+import { login, saveUser } from "./routes/users";
 
 const app = express();
 const port = 8000;
+
+dotenv.config();
 
 // app.get("/", (req, res) => {
 //   res.send("Hello World!");
@@ -29,8 +27,7 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-app.post("/journals", createJournal);
-app.get("/journals", getJournalList);
-app.get("/journals/:id", getJournal);
-app.put("/journals/:id", updateJournal);
-app.delete("/journals/:id", deleteJournal);
+app.use("/journals", journalRoutes);
+
+app.post("/users", saveUser);
+app.post("/login", login);
