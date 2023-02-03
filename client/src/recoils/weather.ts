@@ -1,5 +1,4 @@
 import { atom } from 'recoil';
-import { Journal } from '../model/Journals';
 
 const weatherState = atom({
   key: 'weatherState',
