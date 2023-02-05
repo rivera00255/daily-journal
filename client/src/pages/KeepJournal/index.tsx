@@ -28,6 +28,27 @@ const KeepJournal = () => {
 
   const queryClient = useQueryClient();
 
+  const handleSubmit = () => {
+    if (inputRef.current && inputRef.current.value.length > 2) {
+      createJournal({
+        content: inputRef.current.value,
+        writer: user?.user,
+        weather: {
+          temperature: weather.temperature,
+          precipitation: weather.precipitation,
+        },
+        location: weather.location,
+      });
+      inputRef.current.value = '';
+    }
+  };
+
+  const onCheckEnter = (e: KeyboardEvent) => {
+    if (e.code === 'Enter') {
+      handleSubmit();
+    }
+  };
+
   const { mutate: createJournal } = useMutation(
     (journal: Pick<Journal, 'content' | 'writer' | 'weather' | 'location'>) => {
       return api.post(`${baseUrl}/journals`, journal);
@@ -101,24 +122,8 @@ const KeepJournal = () => {
             <div>로그인 후 이용해주세요.</div>
           ) : (
             <>
-              <textarea placeholder="오늘의 기록..." ref={inputRef} />
-              <button
-                onClick={() => {
-                  if (inputRef.current && inputRef.current.value !== '') {
-                    createJournal({
-                      content: inputRef.current.value,
-                      writer: user.user,
-                      weather: {
-                        temperature: weather.temperature,
-                        precipitation: weather.precipitation,
-                      },
-                      location: weather.location,
-                    });
-                    inputRef.current.value = '';
-                  }
-                }}>
-                기록하기
-              </button>
+              <textarea placeholder="오늘의 기록..." onKeyUp={(e: any) => onCheckEnter(e)} ref={inputRef} />
+              <button onClick={() => handleSubmit()}>기록하기</button>
             </>
           )}
         </div>

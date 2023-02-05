@@ -9,9 +9,12 @@ import { User } from '../../model/Users';
 import { useSetRecoilState } from 'recoil';
 import authState from '../../recoils/auth';
 import { useNavigate } from 'react-router-dom';
+import { useOutsideClick } from '../../hooks/useOutsideClick';
 
 const LoginModal = ({ popup, setPopup }: { popup: boolean; setPopup: Dispatch<SetStateAction<boolean>> }) => {
   const [chooseLogin, setChooseLogin] = useState(true);
+
+  const modalRef = useOutsideClick(() => setPopup(false));
 
   const setAuthState = useSetRecoilState(authState);
 
@@ -80,7 +83,7 @@ const LoginModal = ({ popup, setPopup }: { popup: boolean; setPopup: Dispatch<Se
 
   return (
     <div css={StyledLoginModal}>
-      <div className="container">
+      <div className="container" ref={modalRef}>
         <button className="close-button" onClick={() => setPopup(false)}>
           <CloseIcon width="14px" height="14px" />
         </button>

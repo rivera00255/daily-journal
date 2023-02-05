@@ -9,6 +9,7 @@ import StyledJournalModal from './StyledJournalModal';
 import { useRecoilValue } from 'recoil';
 import authState from '../../recoils/auth';
 import api from '../../utilities/api';
+import { useOutsideClick } from '../../hooks/useOutsideClick';
 
 const JournalModal = ({
   popup,
@@ -19,6 +20,7 @@ const JournalModal = ({
 }) => {
   const user = useRecoilValue(authState);
 
+  const modalRef = useOutsideClick(() => setPopup({ status: false, id: 0 }));
   const contentRef = useRef<HTMLTextAreaElement>(null);
 
   const [edit, setEdit] = useState(false);
@@ -65,7 +67,7 @@ const JournalModal = ({
 
   return (
     <div css={StyledJournalModal}>
-      <div className="container">
+      <div className="container" ref={modalRef}>
         <button className="close-button" onClick={() => setPopup({ status: false, id: 0 })}>
           <CloseIcon width="14px" height="14px" fill="#757575" />
         </button>
